@@ -19,6 +19,15 @@ export default function TicketForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+
+const ticketData = {
+  id: new Date().toISOString(),
+  title,
+  description,
+  priority,
+};
+
     clearForm();
   };
 
@@ -44,13 +53,24 @@ export default function TicketForm() {
       </div>
 
       <fieldset className="priority-fieldset">
-<legend>Priority</legend>
+        <legend>Priority</legend>
 
-{
+        {Object.entries(priorityLabels).map(([value, label]) => (
+          <label key={value} className="priority-label">
+            <input
+              type="radio"
+              value={value}
+              checked={priority === value}
+              className="priority-input"
+              onChange={(e) => setPriority(e.target.value)}
+            ></input>
+            {label}
+          </label>
+        ))}
+      </fieldset>
 
-}
+<button type="submit" className="button">Submit</button>
 
-     </fieldset>
 
     </form>
   );
