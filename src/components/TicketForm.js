@@ -1,6 +1,7 @@
+import { type } from "@testing-library/user-event/dist/type";
 import React, { useState } from "react";
 
-export default function TicketForm() {
+export default function TicketForm({dispatch}) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("1");
@@ -27,6 +28,9 @@ const ticketData = {
   description,
   priority,
 };
+
+
+dispatch({type: "ADD_TICKET", payload: ticketData});
 
     clearForm();
   };
