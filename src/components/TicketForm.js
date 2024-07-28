@@ -1,10 +1,19 @@
-import { type } from "@testing-library/user-event/dist/type";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export default function TicketForm({dispatch}) {
+export default function TicketForm({ dispatch, editingTicket }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("1");
+
+  useEffect(() => {
+    if (editingTicket) {
+      setTitle(editingTicket.title);
+      setDescription(editingTicket.description);
+      setPriority(editingTicket.priority);
+    } else {
+      clearForm();
+    }
+  }, [editingTicket]);
 
   const priorityLabels = {
     1: "Low",
@@ -21,19 +30,29 @@ export default function TicketForm({dispatch}) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const ticketData = {
+      id: editingTicket ? editingTicket.id : new Date().toISOString(),
+      title,
+      description,
+      priority,
+    };
 
-const ticketData = {
-  id: new Date().toISOString(),
-  title,
-  description,
-  priority,
-};
-
-
-dispatch({type: "ADD_TICKET", payload: ticketData});
+    dispatch({
+      type: editingTicket ? "UPDATE_TICKET" : "ADD_TICKET",
+      payload: ticketData,
+    });
 
     clearForm();
   };
+
+
+const handleCancel = (e) => {
+
+  dispatch({
+    type: "CLEAR_EDITING_TICKET",
+  });
+  clearForm();
+}
 
   return (
     <form onSubmit={handleSubmit} className="ticket-form">
@@ -73,9 +92,15 @@ dispatch({type: "ADD_TICKET", payload: ticketData});
         ))}
       </fieldset>
 
-<button type="submit" className="button">Submit</button>
+      <button type="submit" className="button">
+        Submit
+      </button>
 
-
+      {editingTicket && (
+        <button type="button" onClick={handleCancel} className="button">
+          Cancel Edit
+        </button>
+      )}
     </form>
   );
 }
