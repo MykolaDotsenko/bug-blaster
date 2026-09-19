@@ -2,6 +2,8 @@
   "name": "bug-blaster",
   "version": "0.1.0",
   "private": true,
+  "description": "A local-first React bug triage command center focused on clear state, resilient persistence, accessibility, and proportional architecture.",
+  "homepage": ".",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -15,6 +17,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:ci": "react-scripts test --watchAll=false",
+    "check": "npm run test:ci && npm run build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
