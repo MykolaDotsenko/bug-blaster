@@ -25,7 +25,7 @@ test("creates, triages, deletes, and restores a bug report", () => {
         "The final checkout action remains disabled after a network retry.",
     },
   });
-  fireEvent.click(screen.getByLabelText(/Critical/));
+  fireEvent.click(screen.getByRole("radio", { name: /Critical/ }));
   fireEvent.click(screen.getByRole("button", { name: /Launch report/i }));
 
   expect(
