@@ -1,70 +1,176 @@
-# Getting Started with Create React App
+# Bug Blaster — Triage Command Center
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![Quality](https://github.com/MykolaDotsenko/bug-blaster/actions/workflows/quality.yml/badge.svg)](https://github.com/MykolaDotsenko/bug-blaster/actions/workflows/quality.yml)
 
-## Available Scripts
+**A local-first React bug triage workspace rebuilt from a small CRUD exercise into a focused product and architecture case study.**
 
-In the project directory, you can run:
+Bug Blaster helps an engineering team capture defects, prioritize impact, move reports through investigation, search a noisy queue, and recover accidental deletion — without requiring an account or backend.
 
-### `npm start`
+## Product capabilities
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- create and edit structured bug reports
+- P0–P3 priority model
+- bug, regression, performance, and accessibility report types
+- Open → Investigating → Fixed triage workflow
+- owner/team assignment
+- fast full-text-style client filtering across useful ticket fields
+- status and priority filters
+- impact, recent, oldest, and low-priority sorting
+- live operational summary for active, critical, fixed, and resolution rate
+- Undo after deletion
+- versioned browser persistence
+- safe normalization of legacy ticket records
+- responsive desktop/mobile UI
+- reduced-motion and high-contrast support
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Stack
 
-### `npm test`
+- React 18
+- JavaScript
+- CSS
+- Web Storage API
+- Jest / React Testing Library
+- GitHub Actions
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The implementation intentionally adds **no product runtime dependency beyond React**.
 
-### `npm run build`
+## Architecture
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```text
+UI components
+     |
+     v
+App / dispatch boundary
+     |
+     +----> pure reducer
+     |
+     +----> pure model + selectors
+     |
+     +----> local-storage adapter
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Important engineering decisions:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. the reducer is deterministic — ids and timestamps are created before dispatch;
+2. canonical tickets are never mutated by filtering or sorting;
+3. browser persistence is isolated from state transitions;
+4. only durable product data is persisted;
+5. legacy records are normalized on read;
+6. deletion is reversible without introducing a full history subsystem;
+7. native form/select controls carry most interaction and accessibility semantics.
 
-### `npm run eject`
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for the design rationale and trade-offs.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Why this is not over-engineered
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The original app was a small CRUD form. A backend, Redux, event bus, query layer, or design-system dependency would make the repository larger without solving the portfolio problem.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The rebuild adds boundaries only where they protect something concrete:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- reducer → predictable state transitions
+- model helpers → normalized ticket data
+- selectors → testable discovery/ordering behavior
+- storage adapter → resilient persistence
+- focused components → readable UI responsibilities
 
-## Learn More
+## Quality checks
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Install dependencies:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm ci
+```
 
-### Code Splitting
+Run the complete local quality gate:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+npm run check
+```
 
-### Analyzing the Bundle Size
+This executes the test suite and a production build.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Tests cover:
 
-### Making a Progressive Web App
+- create / triage / delete / Undo user flow
+- queue searching
+- reducer deletion/restoration behavior
+- targeted status transitions
+- impact sorting
+- non-mutating filters
+- operational statistics
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+GitHub Actions runs tests and the production build on pushes and pull requests.
 
-### Advanced Configuration
+## Run locally
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+npm ci
+npm start
+```
 
-### Deployment
+Open `http://localhost:3000`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+The first visit loads a small fictional demo queue so the workflow is immediately visible. Changes remain in the current browser. **Reset demo** restores the sample workspace.
 
-### `npm run build` fails to minify
+## Accessibility and UX
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The interface includes:
+
+- skip-to-content navigation
+- semantic headings, labels, fieldsets, and native selects
+- descriptive labels for icon actions
+- strong visible focus treatment
+- responsive touch targets
+- `prefers-reduced-motion`
+- `prefers-contrast: more`
+- restrained motion with no permanent JavaScript animation loop
+
+## Project structure
+
+```text
+src/
+├── components/
+│   ├── StatsPanel.js
+│   ├── TicketForm.js
+│   ├── TicketItem.js
+│   ├── TicketList.js
+│   └── TriageToolbar.js
+├── domain/
+│   └── ticketModel.js
+├── reducers/
+│   ├── ticketReducer.js
+│   └── ticketReducer.test.js
+├── storage/
+│   └── ticketStorage.js
+├── utilities/
+│   ├── sortingUtilities.js
+│   └── sortingUtilities.test.js
+├── App.js
+├── App.test.js
+├── index.js
+└── styles.css
+```
+
+## Evolution
+
+The original 2024 implementation already had the useful seed of a product: ticket CRUD, priorities, a reducer, and sorting.
+
+The rebuild keeps that core idea while replacing the tutorial surface with:
+
+- a real triage information model;
+- reliable local persistence;
+- clearer state ownership;
+- deterministic selectors;
+- reversible destructive actions;
+- meaningful automated tests;
+- responsive accessible UI;
+- recruiter-facing engineering documentation;
+- CI.
+
+The result stays small enough to understand in one sitting while demonstrating product judgment, state modeling, UX, testing, and maintainability.
+
+## Scope
+
+Bug Blaster is a portfolio application, not a collaborative production issue tracker. It intentionally does not implement authentication, remote synchronization, comments, attachments, or multi-user conflict resolution.
+
+Those capabilities require a server-side source of truth and a substantially different product scope.
