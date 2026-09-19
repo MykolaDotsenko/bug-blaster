@@ -22,8 +22,8 @@ import {
 } from "./utilities/sortingUtilities";
 
 const createId = () => {
-  if (globalThis.crypto?.randomUUID) {
-    return globalThis.crypto.randomUUID();
+  if (window.crypto?.randomUUID) {
+    return window.crypto.randomUUID();
   }
 
   return `ticket-${Date.now()}-${Math.random().toString(16).slice(2)}`;
