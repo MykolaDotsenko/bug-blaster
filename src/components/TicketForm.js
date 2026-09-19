@@ -57,9 +57,10 @@ export default function TicketForm({ editingTicket, onSubmit, onCancel }) {
         </span>
       </div>
 
-      <label className="field">
-        <span>Title</span>
+      <div className="field">
+        <label htmlFor="ticket-title">Title</label>
         <input
+          id="ticket-title"
           ref={titleRef}
           type="text"
           value={draft.title}
@@ -68,13 +69,17 @@ export default function TicketForm({ editingTicket, onSubmit, onCancel }) {
           required
           minLength="3"
           maxLength="80"
+          aria-describedby="ticket-title-hint"
         />
-        <small>Specific enough to scan in a busy incident queue.</small>
-      </label>
+        <small id="ticket-title-hint">
+          Specific enough to scan in a busy incident queue.
+        </small>
+      </div>
 
-      <label className="field">
-        <span>Description</span>
+      <div className="field">
+        <label htmlFor="ticket-description">Description</label>
         <textarea
+          id="ticket-description"
           value={draft.description}
           onChange={(event) =>
             updateField("description", event.target.value)
@@ -84,14 +89,18 @@ export default function TicketForm({ editingTicket, onSubmit, onCancel }) {
           minLength="12"
           maxLength="600"
           rows="6"
+          aria-describedby="ticket-description-hint"
         />
-        <small>{draft.description.length}/600 characters</small>
-      </label>
+        <small id="ticket-description-hint">
+          {draft.description.length}/600 characters
+        </small>
+      </div>
 
       <div className="form-split">
-        <label className="field">
-          <span>Type</span>
+        <div className="field">
+          <label htmlFor="ticket-type">Type</label>
           <select
+            id="ticket-type"
             value={draft.type}
             onChange={(event) => updateField("type", event.target.value)}
           >
@@ -101,18 +110,19 @@ export default function TicketForm({ editingTicket, onSubmit, onCancel }) {
               </option>
             ))}
           </select>
-        </label>
+        </div>
 
-        <label className="field">
-          <span>Owner</span>
+        <div className="field">
+          <label htmlFor="ticket-owner">Owner</label>
           <input
+            id="ticket-owner"
             type="text"
             value={draft.owner}
             onChange={(event) => updateField("owner", event.target.value)}
             placeholder="Team or person"
             maxLength="40"
           />
-        </label>
+        </div>
       </div>
 
       <fieldset className="priority-fieldset">

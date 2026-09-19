@@ -53,12 +53,17 @@ export const sortTickets = (tickets, preference) => {
 
     case "impact":
     default:
-      return sorted.sort(
-        (a, b) =>
-          statusRank[a.status] - statusRank[b.status] ||
+      return sorted.sort((a, b) => {
+        const resolvedDifference =
+          Number(a.status === "fixed") - Number(b.status === "fixed");
+
+        return (
+          resolvedDifference ||
           Number(b.priority) - Number(a.priority) ||
-          Date.parse(b.updatedAt) - Date.parse(a.updatedAt),
-      );
+          statusRank[a.status] - statusRank[b.status] ||
+          Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
+        );
+      });
   }
 };
 
