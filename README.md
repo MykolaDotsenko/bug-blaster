@@ -2,6 +2,8 @@
 
 [![Quality](https://github.com/MykolaDotsenko/bug-blaster/actions/workflows/quality.yml/badge.svg)](https://github.com/MykolaDotsenko/bug-blaster/actions/workflows/quality.yml)
 
+**Live demo:** https://mykoladotsenko.github.io/bug-blaster/
+
 **A small React defect-triage workspace built around predictable reducer transitions, filtering and reversible deletion.**
 
 Bug Blaster is a portfolio/learning-history project, not a collaborative replacement for Jira or Linear.
