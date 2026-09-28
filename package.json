@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "A local-first React bug triage command center focused on clear state, resilient persistence, accessibility, and proportional architecture.",
-  "homepage": ".",
+  "homepage": "https://mykoladotsenko.github.io/bug-blaster/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
